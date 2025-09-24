@@ -10,6 +10,11 @@ from supabase import create_client, Client
 # Use environment variables for security
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# Ensure the environment variables are set before creating the client
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError("Supabase environment variables are not set. Please check your Render dashboard.")
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
@@ -29,11 +34,6 @@ def upload_data():
         # Decode the Base64 image data
         image_bytes = base64.b64decode(image_data_b64)
 
-        # You can save the image here if you have cloud storage (e.g., S3, Cloudinary)
-        # For simplicity, we'll store the Base64 string directly in Supabase.
-        # This is a simple approach, but for very large images, consider a dedicated storage solution.
-        
-        # Prepare data for insertion
         detected_str = ", ".join([f"{k}:{v}" for k, v in detected_counts.items()])
         missing_str = ", ".join(missing_objects)
 
@@ -41,7 +41,7 @@ def upload_data():
             "timestamp": timestamp,
             "detected_objects": detected_str,
             "missing_objects": missing_str,
-            "annotated_image_b64": image_data_b64 # Storing the Base64 string
+            "annotated_image_b64": image_data_b64 
         }
         
         # Insert data into Supabase table
@@ -55,6 +55,5 @@ def upload_data():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    # Render automatically provides a PORT environment variable
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
