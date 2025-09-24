@@ -8,8 +8,8 @@ from supabase import create_client, Client
 
 # --- Supabase Configuration ---
 # Use environment variables for security
-SUPABASE_URL = os.getenv("https://osrduqrhujdyvdbciccw.supabase.co/")
-SUPABASE_KEY = os.getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zcmR1cXJodWpkeXZkYmNpY2N3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njk2NDMyOSwiZXhwIjoyMDcyNTQwMzI5fQ.B3mBxMVL0LW7pCMYdXLZAyau0sR4QpmtuUsjKB5mBxY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
